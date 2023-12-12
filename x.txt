@@ -1,0 +1,2845 @@
+ASSIGNMENT 1
+#include <iostream>
+using namespace std;
+class Node
+{
+public:
+	int data;
+	Node *left;
+	Node *right;
+};
+class BST
+{
+public:
+	Node *root;
+	BST()
+	{
+		root = NULL;
+	}
+	void insert();
+	void inorder(Node *);
+	void search(int key);
+	void minimum();
+	void maximum();
+	int height(Node *);
+	void mirror(Node *);
+};
+void BST::insert()
+{
+	Node *curr, *temp;
+	cout << "Enter Data : ";
+	curr = new Node;
+	cin >> curr->data;
+	curr->left = curr->right = NULL;
+	if (root == NULL)
+	{
+		root = curr;
+	}
+	else
+	{
+		temp = root;
+		while (1)
+		{
+			if (curr->data <= temp->data)
+			{
+				if (temp->left == NULL)
+				{
+					temp->left = curr;
+					break;
+				}
+				else
+				{
+					temp = temp->left;
+				}
+			}
+			else
+			{
+				if (temp->right == NULL)
+				{
+					temp->right = curr;
+					break;
+				}
+				else
+				{
+					temp = temp->right;
+				}
+			}
+		}
+	}
+}
+void BST::inorder(Node *root)
+{
+	if (root != NULL)
+	{
+		inorder(root->left);
+		cout << " " << root->data;
+		inorder(root->right);
+	}
+}
+void BST::minimum()
+{
+	Node *temp;
+	int min;
+	temp = root;
+	while (temp->left != NULL)
+	{
+		min = temp->data;
+		temp = temp->left;
+		if (temp->data < min)
+		{
+			min = temp->data;
+		}
+		else
+		{
+			temp = temp->left;
+		}
+	}
+	cout << "minimum no. is:" << min;
+}
+void BST::maximum()
+{
+	Node *temp;
+	int max;
+	temp = root;
+	while (temp->right != NULL)
+	{
+		max = temp->data;
+		temp = temp->right;
+		if (temp->data > max)
+		{
+			max = temp->data;
+		}
+		else
+		{
+			temp = temp->right;
+		}
+	}
+	cout << "Maximum no. is : " << max;
+}
+int BST::height(Node *root)
+{
+	if (root == NULL)
+	{
+		return 0;
+	}
+	else
+	{
+		if (height(root->right) > height(root->left))
+		{
+			return (1 + height(root->right));
+		}
+		else
+		{
+			return (1 + height(root->left));
+		}
+	}
+}
+void BST::search(int key)
+{
+	Node *curr;
+	curr = root;
+	while (curr != NULL)
+	{
+		if (curr->data == key)
+		{
+			cout << "found";
+			break;
+		}
+		else
+		{
+			if (key < curr->data)
+			{
+				curr = curr->left;
+			}
+			else
+			{
+				curr = curr->right;
+			}
+		}
+	}
+	if (curr == NULL)
+	{
+		cout << "not found";
+	}
+}
+void BST::mirror(Node *node)
+{
+	if (node == NULL)
+		return;
+	else
+	{
+		Node *temp;
+		mirror(node->left);
+		mirror(node->right);
+		temp = node->left;
+		node->left = node->right;
+		node->right = temp;
+	}
+}
+int main()
+{
+	BST b;
+	int key, ch;
+	do
+	{
+		cout << endl;
+		cout << "1. Insert    : " << endl;
+		cout << "2. Inorder   : " << endl;
+		cout << "3. Search    : " << endl;
+		cout << "4. Minimum   : " << endl;
+		cout << "5. Maximum   : " << endl;
+		cout << "6. Height    : " << endl;
+		cout << "7. Swap      : " << endl;
+		cout << "Enter your choice : ";
+		cin >> ch;
+		switch (ch)
+		{
+		case 1:
+			b.insert();
+			break;
+		case 2:
+			cout << "InOrder traversal is : " << endl;
+			b.inorder(b.root);
+			break;
+		case 3:
+			cout << "Enter key : " << endl;
+			cin >> key;
+			b.search(key);
+			break;
+		case 4:
+			b.minimum();
+			break;
+		case 5:
+			b.maximum();
+			break;
+		case 6:
+			cout << "Height of tree: " << b.height(b.root) << endl;
+			break;
+		case 7:
+			cout << "Initially, the BST is : " << endl;
+			b.inorder(b.root);
+			b.mirror(b.root);
+			cout << "Finally, the BST is : " << endl;
+			b.inorder(b.root);
+			break;
+		}
+	} while (ch != 0);
+	return 0;
+}
+
+ASSIGNMENT 2
+#include <bits/stdc++.h>
+using namespace std;
+class treeNode
+{
+	int val;
+	treeNode *left, *right;
+	friend class binary;
+
+public:
+	treeNode()
+	{
+		val = 0;
+		left = NULL;
+		right = NULL;
+	}
+};
+class binary
+{
+	treeNode *root;
+
+public:
+	int leaves = 0, total = 0;
+	binary()
+	{
+		root = NULL;
+	}
+	treeNode *createHelper(treeNode *root)
+	{
+		char chl;
+		cout << "Do you want to insert to the left of " << root->val << "?" << endl;
+		cin >> chl;
+		if (chl == 'y' || chl == 'Y')
+		{
+			int l;
+			cout << "Enter the value to be inserted to the left of " << root->val << ":" << endl;
+			cin >> l;
+			treeNode *treel = new treeNode();
+			treel->val = l;
+			root->left = treel;
+			root->left = createHelper(root->left);
+		}
+		char chr;
+		cout << "Do you want to insert to the right of " << root->val << "?" << endl;
+		cin >> chr;
+		if (chr == 'y' || chr == 'Y')
+		{
+			int r;
+			cout << "Enter the value to be inserted to the right of " << root->val << ":" << endl;
+			cin >> r;
+			treeNode *treer = new treeNode();
+			treer->val = r;
+			root->right = treer;
+			root->right = createHelper(root->right);
+		}
+		return root;
+	}
+	void create()
+	{
+		treeNode *tree = new treeNode();
+		cout << "Enter the value of the root node: ";
+		cin >> tree->val;
+		root = tree;
+		createHelper(root);
+	}
+	void nonReCreate()
+	{
+		queue<treeNode *> mq;
+		if (root == NULL)
+		{
+			cout << "Enter the value of the root node: ";
+			treeNode *tree = new treeNode();
+			cin >> tree->val;
+			root = tree;
+		}
+		mq.push(root);
+		while (mq.size() > 0)
+		{
+			int count = mq.size();
+			for (int i = 0; i < count; i++)
+			{
+				treeNode *t = mq.front();
+				mq.pop();
+				cout << "Do you want to insert to the left of " << t->val << " ?";
+				char chl;
+				cin >> chl;
+				if (chl == 'y' || chl == 'Y')
+				{
+					treeNode *le = new treeNode();
+					cout << "Enter the value to be inserted to the left of " << t->val << " : ";
+					cin >> le->val;
+					t->left = le;
+					mq.push(le);
+				}
+				char chr;
+				cout << "Do you want to insert to the right of " << t->val << " ?";
+				cin >> chr;
+				if (chr == 'y' || chr == 'Y')
+				{
+					treeNode *ri = new treeNode();
+					cout << "Enter the value to be inserted to the right of " << t->val << " : ";
+					cin >> ri->val;
+					t->right = ri;
+					mq.push(ri);
+				}
+			}
+		}
+	}
+	void displayHelper(treeNode *tree)
+	{
+		if (tree == NULL)
+		{
+			cout << "Empty Tree" << endl;
+			return;
+		}
+		queue<treeNode *> mq;
+		mq.push(tree);
+		while (mq.size() > 0)
+		{
+			int count = mq.size();
+			for (int i = 0; i < count; i++)
+			{
+				treeNode *t = mq.front();
+				mq.pop();
+				cout << t->val << " ";
+				if (t->left != NULL)
+				{
+					mq.push(t->left);
+				}
+				if (t->right != NULL)
+				{
+					mq.push(t->right);
+				}
+			}
+			cout << endl;
+		}
+	}
+	void display()
+	{
+		displayHelper(root);
+	}
+	void inorderHelper(treeNode *root)
+	{
+		if (root == NULL)
+		{
+			return;
+		}
+		else
+		{
+			inorderHelper(root->left);
+			cout << root->val << " ";
+			inorderHelper(root->right);
+		}
+	}
+	void inorder()
+	{
+		inorderHelper(root);
+	}
+	void non_recursive()
+	{
+		stack<pair<treeNode *, int>> st;
+		vector<int> pre;
+		vector<int> in;
+		vector<int> post;
+		st.push(make_pair(root, 1));
+		while (st.size() > 0)
+		{
+			if (st.top().second == 1)
+			{
+				pre.push_back(st.top().first->val);
+				st.top().second++;
+				if (st.top().first->left != NULL)
+				{
+					st.push(make_pair(st.top().first->left, 1));
+				}
+			}
+			else if (st.top().second == 2)
+			{
+				in.push_back(st.top().first->val);
+				st.top().second++;
+				if (st.top().first->right != NULL)
+				{
+					st.push(make_pair(st.top().first->right, 1));
+				}
+			}
+			else
+			{
+				post.push_back(st.top().first->val);
+				st.pop();
+			}
+		}
+		cout << endl;
+		cout << "PREORDER: ";
+		for (int i = 0; i < pre.size(); i++)
+		{
+			cout << pre[i] << " ";
+		}
+		cout << endl;
+		cout << "INORDER: ";
+		for (int i = 0; i < in.size(); i++)
+		{
+			cout << in[i] << " ";
+		}
+		cout << endl;
+		cout << "POSTORDER: ";
+		for (int i = 0; i < post.size(); i++)
+		{
+			cout << post[i] << " ";
+		}
+		cout << endl;
+	}
+	void height()
+	{
+		cout << "The height of the tree is:" << heightHelper(root) << endl;
+	}
+	int heightHelper(treeNode *root)
+	{
+		if (root == NULL)
+		{
+			return 0;
+		}
+		int ldepth = heightHelper(root->left);
+		int rdepth = heightHelper(root->right);
+		return max(ldepth, rdepth) + 1;
+	}
+	void countLeaves()
+	{
+		countHelper(root);
+		cout << "The number of leaves in the tree are: " << leaves << endl;
+		cout << "The number of internal nodes in the tree are: " << total - leaves - 1 << endl;
+	}
+	void countHelper(treeNode *root)
+	{
+		int leaves = 0, total = 0;
+		if (root == NULL)
+		{
+			return;
+		}
+		else if (root->left == NULL && root->right == NULL)
+		{
+			leaves++;
+			total++;
+		}
+		else
+		{
+			total++;
+			countHelper(root->left);
+			countHelper(root->right);
+		}
+	}
+	void swap()
+	{
+		swapHelper(root);
+		display();
+	}
+	void swapHelper(treeNode *root)
+	{
+		if (root == NULL)
+		{
+			return;
+		}
+		else
+		{
+			treeNode *temp = root->left;
+			root->left = root->right;
+			root->right = temp;
+			swapHelper(root->left);
+			swapHelper(root->right);
+		}
+	}
+	void erase()
+	{
+		root = NULL;
+		int leaves = 0, total = 0;
+	}
+};
+int main()
+{
+	binary b, obj;
+	int choice;
+	do
+	{
+		cout << endl;
+		cout << "1. Recursive Create                   : " << endl;
+		cout << "2. Non-Recursively Create             : " << endl;
+		cout << "3. Display                            : " << endl;
+		cout << "4. Display In-Order Recursively       : " << endl;
+		cout << "5. Display All Orders Non-Recursively : " << endl;
+		cout << "6. Display Height                     : " << endl;
+		cout << "7. Display Leaf Count                 : " << endl;
+		cout << "8. Display Swapped Tree               : " << endl;
+		cout << "9. Make Tree Empty                    : " << endl;
+		cout << "Enter your choice                     : ";
+		cin >> choice;
+		switch (choice)
+		{
+		case 1:
+			cout << "You have chosen Create Recursively, the Process begins. " << endl;
+			b.create();
+			break;
+		case 2:
+			cout << "You have chosen Create Non-Recursively, the Process begins. " << endl;
+			b.nonReCreate();
+			break;
+		case 3:
+			cout << "You have chosen Display, the Process begins. " << endl;
+			b.display();
+			break;
+		case 4:
+			cout << "You have chosen Display In-Order Recursively, the Process begins. " << endl;
+			b.inorder();
+			break;
+		case 5:
+			cout << "You have chosen Display All Orders Non-Recursively, the Process begins. " << endl;
+			b.non_recursive();
+			break;
+		case 6:
+			cout << "You have chosen Display Height, the Process begins. " << endl;
+			b.height();
+			break;
+		case 7:
+			cout << "You have chosen Display Leaf Count, the Process begins. " << endl;
+			b.countLeaves();
+			break;
+		case 8:
+			cout << "You have chosen Display Swapped Tree, the Process begins. " << endl;
+			b.swap();
+			break;
+		case 9:
+			cout << "You have chosen to Make Tree Empty, the Process begins. " << endl;
+			b.erase();
+			break;
+		}
+	} while (choice != 0);
+	return 0;
+}
+
+ASSIGNMENT 3
+#include <iostream>
+#include <cstdlib>
+#define MAX_VALUE 65536
+using namespace std;
+class Node
+{
+public:
+	int key;
+	Node *left, *right;
+	bool leftThread, rightThread;
+};
+class TBST
+{
+private:
+	Node *root;
+
+public:
+	TBST()
+	{
+		root = new Node();
+		root->right = root->left = root;
+		root->leftThread = true;
+		root->key = MAX_VALUE;
+	}
+	void makeEmpty();
+	void insert(int key);
+	bool search(int key);
+	void Delete(int key);
+	void printTree();
+};
+void TBST::makeEmpty()
+{
+	root = new Node();
+	root->right = root->left = root;
+	root->leftThread = true;
+	root->key = MAX_VALUE;
+}
+void TBST::insert(int key)
+{
+	Node *p = root;
+	for (;;)
+	{
+		if (p->key < key)
+		{
+			if (p->rightThread)
+				break;
+			p = p->right;
+		}
+		else if (p->key > key)
+		{
+			if (p->leftThread)
+				break;
+			p = p->left;
+		}
+		else
+			return;
+	}
+	Node *tmp = new Node();
+	tmp->key = key;
+	tmp->rightThread = tmp->leftThread = true;
+	if (p->key < key)
+	{
+		tmp->right = p->right;
+		tmp->left = p;
+		p->right = tmp;
+		p->rightThread = false;
+	}
+	else
+	{
+		tmp->right = p;
+		tmp->left = p->left;
+		p->left = tmp;
+		p->leftThread = false;
+	}
+}
+bool TBST::search(int key)
+{
+	Node *tmp = root->left;
+	for (;;)
+	{
+		if (tmp->key < key)
+		{
+			if (tmp->rightThread)
+				return false;
+			tmp = tmp->right;
+		}
+		else if (tmp->key > key)
+		{
+			if (tmp->leftThread)
+				return false;
+			tmp = tmp->left;
+		}
+		else
+			return true;
+	}
+}
+void TBST::Delete(int key)
+{
+	Node *dest = root->left, *p = root;
+	for (;;)
+	{
+		if (dest->key < key)
+		{
+			if (dest->rightThread)
+				return;
+			p = dest;
+			dest = dest->right;
+		}
+		else if (dest->key > key)
+		{
+			if (dest->leftThread)
+				return;
+			p = dest;
+			dest = dest->left;
+		}
+		else
+			break;
+	}
+	Node *target = dest;
+	if (!dest->rightThread && !dest->leftThread)
+	{
+		p = dest;
+		target = dest->left;
+		while (!target->rightThread)
+		{
+			p = target;
+			target = target->right;
+		}
+		dest->key = target->key;
+	}
+	if (p->key >= target->key)
+	{
+		if (target->rightThread && target->leftThread)
+		{
+			p->left = target->left;
+			p->leftThread = true;
+		}
+		else if (target->rightThread)
+		{
+			Node *largest = target->left;
+			while (!largest->rightThread)
+			{
+				largest = largest->right;
+			}
+			largest->right = p;
+			p->left = target->left;
+		}
+		else
+		{
+			Node *smallest = target->right;
+			while (!smallest->leftThread)
+			{
+				smallest = smallest->left;
+			}
+			smallest->left = target->left;
+			p->left = target->right;
+		}
+	}
+	else
+	{
+		if (target->rightThread && target->leftThread)
+		{
+			p->right = target->right;
+			p->rightThread = true;
+		}
+		else if (target->rightThread)
+		{
+			Node *largest = target->left;
+			while (!largest->rightThread)
+			{
+				largest = largest->right;
+			}
+			largest->right = target->right;
+			p->right = target->left;
+		}
+		else
+		{
+			Node *smallest = target->right;
+			while (!smallest->leftThread)
+			{
+				smallest = smallest->left;
+			}
+			smallest->left = p;
+			p->right = target->right;
+		}
+	}
+}
+void TBST::printTree()
+{
+	Node *tmp = root, *p;
+	for (;;)
+	{
+		p = tmp;
+		tmp = tmp->right;
+		if (!p->rightThread)
+		{
+			while (!tmp->leftThread)
+			{
+				tmp = tmp->left;
+			}
+		}
+		if (tmp == root)
+			break;
+		cout << tmp->key << "   ";
+	}
+	cout << endl;
+}
+int main()
+{
+	TBST tbst;
+	cout << endl;
+	cout << "Threaded Binary Search Tree Test " << endl;
+	char ch;
+	int choice, val;
+	do
+	{
+		cout << "Threaded Binary Search Tree Operations " << endl;
+		cout << "1. Insert : " << endl;
+		cout << "2. Delete : " << endl;
+		cout << "3. Search : " << endl;
+		cout << "4. Clear  : " << endl;
+		cout << "Enter Your Choice : ";
+		cin >> choice;
+		switch (choice)
+		{
+		case 1:
+			cout << "Enter integer element to insert : ";
+			cin >> val;
+			tbst.insert(val);
+			break;
+		case 2:
+			cout << "Enter integer element to delete : ";
+			cin >> val;
+			tbst.Delete(val);
+			break;
+		case 3:
+			cout << "Enter integer element to search : ";
+			cin >> val;
+			if (tbst.search(val) == true)
+				cout << "Element " << val << " found in the tree" << endl;
+			else
+				cout << "Element " << val << " not found in the tree" << endl;
+			break;
+		case 4:
+			cout << "Tree Cleared " << endl;
+			tbst.makeEmpty();
+			break;
+		default:
+			cout << "Wrong Entry " << endl;
+			break;
+		}
+		cout << "Tree : ";
+		tbst.printTree();
+		cout << "Do you want to continue (Enter y or n) : ";
+		cin >> ch;
+	} while (ch == 'Y' || ch == 'y');
+	return 0;
+}
+
+ASSIGNMENT 4
+#include <bits/stdc++.h>
+#define MAX 10
+using namespace std;
+struct person
+{
+    long int mobile;
+    char name[40];
+    void readData()
+    {
+        cout << "Enter Name: ";
+        cin >> name;
+        cout << "Enter Mobile No.: ";
+        cin >> mobile;
+    }
+    void putData()
+    {
+        cout << "\t|\t" << name;
+        cout << "\t|\t" << mobile << "\t\t|";
+    }
+};
+class hashTable
+{
+    person ht[MAX];
+
+public:
+    hashTable()
+    {
+        for (int i = 0; i < MAX; i++)
+        {
+            ht[i].mobile = 0;
+            strcpy(ht[i].name, "");
+        }
+    }
+    int hash(long int key)
+    {
+        return (key % 10);
+    }
+    void insert(person p)
+    {
+        int pos = hash(p.mobile);
+        if (ht[pos].mobile == 0)
+            ht[pos] = p;
+        else
+        {
+            for (int i = pos + 1; i % MAX != pos; i = (i + 1 % MAX))
+            {
+                if (ht[i].mobile == 0)
+                {
+                    ht[i] = p;
+                    return;
+                }
+            }
+            cout << "The hashtable is full!";
+        }
+    }
+    void compare(long int n)
+    {
+        int k = 1;
+        int pos = hash(n);
+        if (ht[pos].mobile == n)
+        {
+            cout << "Found with " << k << " comparisons at " << pos << "." << endl;
+            return;
+        }
+        for (int i = pos + 1; i % MAX != pos; i = (i + 1) % MAX)
+        {
+            k++;
+            if (ht[i].mobile == n)
+            {
+                cout << "Found with " << k << " comparisons at " << i << "." << endl;
+                return;
+            }
+        }
+        if (k >= MAX)
+        {
+            cout << "Not found" << endl;
+            return;
+        }
+    }
+    void insWReplace(person p)
+    {
+        int pos = hash(p.mobile);
+        if (ht[pos].mobile == 0)
+            ht[pos] = p;
+        else if ((ht[pos].mobile) % 10 != pos)
+        {
+            person temp = ht[pos];
+            ht[pos] = p;
+            for (int i = pos + 1; i % MAX != pos; i = (i + 1) % MAX)
+            {
+                if (ht[i].mobile == 0)
+                {
+                    ht[i] = temp;
+                    return;
+                }
+            }
+        }
+        else
+        {
+            for (int i = pos + 1; i % MAX != pos; i = (i + 1) % MAX)
+            {
+                if (ht[i].mobile == 0)
+                {
+                    ht[i] = p;
+                    return;
+                }
+            }
+            cout << "Hash Table is full!!" << endl;
+            return;
+        }
+    }
+    void search(long int key)
+    {
+        int pos = hash(key);
+        if (ht[pos].mobile == key)
+        {
+            cout << "Record found!";
+            cout << "|Sr.no. |\tName\t|\tMobile Number\t|";
+            cout << "\n|" << pos;
+            ht[pos].putData();
+        }
+        else
+        {
+            for (int i = pos + 1; i % MAX != pos; i = (i + 1 % MAX))
+            {
+                if (ht[i].mobile == key)
+                {
+                    cout << "Record found!";
+                    cout << "|Sr.no. |\tName\t|\tMobile Number\t|";
+                    cout << "\n|" << i;
+                    ht[i].putData();
+                    return;
+                }
+            }
+            cout << "Record not found!";
+        }
+    }
+    void deleteRecord(long int key)
+    {
+        int pos = hash(key);
+        if (ht[pos].mobile == key)
+        {
+            ht[pos].mobile = 0;
+            strcpy(ht[pos].name, "");
+            cout << "Record deleted successfully!";
+        }
+        else
+        {
+            for (int i = pos + 1; i % MAX != pos; i = (i + 1 % MAX))
+            {
+                if (ht[i].mobile == key)
+                {
+                    ht[pos].mobile = 0;
+                    strcpy(ht[pos].name, "");
+                    cout << "Record deleted successfully!";
+                    return;
+                }
+            }
+            cout << "Record not found!";
+        }
+    }
+    void display()
+    {
+        cout << "The contents of the hashtable are: \n";
+        cout << "|Sr.no. |\tName\t|\tMobile Number\t|";
+        for (int i = 0; i < MAX; i++)
+        {
+            cout << "\n|" << i;
+            ht[i].putData();
+        }
+    }
+};
+int main()
+{
+    hashTable h, hr;
+    person p;
+    long int key;
+    int choice;
+    do
+    {
+        cout << "\nOptions:\n1. Insert Data\n2. Search\n3. Delete\n4. Display\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+        switch (choice)
+        {
+        case 1:
+            p.readData();
+            h.insert(p);
+            hr.insWReplace(p);
+            break;
+        case 2:
+            cout << "Enter the phone number that you want to search: ";
+            cin >> key;
+            h.compare(key);
+            break;
+        case 3:
+            cout << "Enter the phone number of the person whose record you want to delete: ";
+            cin >> key;
+            h.deleteRecord(key);
+            break;
+        case 4:
+            h.display();
+            cout << endl;
+            break;
+        }
+    } while (choice < 5);
+    return 0;
+}
+
+ASSIGNMENT 5
+#include <iostream>
+using namespace std;
+class Node
+{
+	friend class hashTable;
+	string word;
+	string meaning;
+	Node *next;
+
+public:
+	Node()
+	{
+		word = "";
+		meaning = "";
+		next = NULL;
+	}
+	Node(string w, string m)
+	{
+		word = w;
+		meaning = m;
+		next = NULL;
+	}
+};
+class hashTable
+{
+	Node *hashArr[26];
+
+public:
+	hashTable()
+	{
+		for (int i = 0; i < 26; i++)
+		{
+			hashArr[i] = NULL;
+		}
+	}
+	int hashFunc(string w)
+	{
+		return (int(w[0]) - int('A'));
+	}
+	void insert(string w, string m)
+	{
+		Node *nn = new Node(w, m);
+		int k = hashFunc(w);
+		if (hashArr[k] == NULL)
+		{
+			hashArr[k] = nn;
+		}
+		else
+		{
+			Node *temp = hashArr[k];
+			while (temp->next)
+				temp = temp->next;
+			temp->next = nn;
+		}
+	}
+	void display()
+	{
+		cout << "Index "
+			 << " [Words,Meaning] " << endl;
+		for (int i = 0; i < 26; i++)
+		{
+			cout << i + 1 << " [" << char(65 + i) << "] : ";
+			Node *temp = hashArr[i];
+			while (temp)
+			{
+				cout << "[" << temp->word << ", " << temp->meaning << "]"
+					 << "==>";
+				temp = temp->next;
+			}
+			cout << endl;
+		}
+	}
+	void remove(string w)
+	{
+		int hashValue = hashFunc(w);
+		if (hashArr[hashValue] == NULL)
+		{
+			cout << "No such word is present. " << endl;
+			return;
+		}
+		if (hashArr[hashValue]->word == w)
+		{
+			hashArr[hashValue] = hashArr[hashValue]->next;
+			return;
+		}
+		Node *temp = hashArr[hashValue];
+		Node *temp2 = hashArr[hashValue]->next;
+		while (temp2 != NULL)
+		{
+			if (temp2->word == w)
+			{
+				temp->next = temp2->next;
+				temp2 = NULL;
+				return;
+			}
+		}
+		cout << "No such word is present. " << endl;
+	}
+	void search(string w)
+	{
+		int hashValue = hashFunc(w);
+		if (hashArr[hashValue] == NULL)
+		{
+			cout << "No such word is present. " << endl;
+			return;
+		}
+		if (hashArr[hashValue]->word == w)
+		{
+			cout << "Word has been found at " << hashValue << "." << endl;
+			return;
+		}
+		Node *temp2 = hashArr[hashValue];
+		while (temp2 != NULL)
+		{
+			if (temp2->word == w)
+			{
+				cout << "Word has been found at " << hashValue + 1 << "." << endl;
+				return;
+			}
+			temp2 = temp2->next;
+		}
+		cout << "No such word is present. " << endl;
+	}
+};
+int main()
+{
+	hashTable h;
+	string w1, m1, w2, w3;
+	int choice;
+	do
+	{
+		cout << endl;
+		cout << "1. Insert  : " << endl;
+		cout << "2. Search  : " << endl;
+		cout << "3. Delete  : " << endl;
+		cout << "4. Display : " << endl;
+		cout << "Enter your Choice : ";
+		cin >> choice;
+		switch (choice)
+		{
+		case 1:
+			cout << "Enter Word to be Inserted : ";
+			cin >> w1;
+			cout << "Enter Meaning of the Word : ";
+			cin >> m1;
+			h.insert(w1, m1);
+			break;
+		case 2:
+			cout << "Enter Word to be Searched : ";
+			cin >> w2;
+			h.search(w2);
+			break;
+		case 3:
+			cout << "Enter Word to be Deleted  : ";
+			cin >> w3;
+			h.remove(w3);
+			break;
+		case 4:
+			cout << "HashTable has been Displayed : " << endl;
+			h.display();
+			break;
+		}
+	} while (choice != 0);
+	return 0;
+}
+
+ASSIGNMENT 6
+#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+class Node
+{
+	string data;
+	Node *down;
+	Node *right;
+	int visited;
+
+public:
+	Node(string x)
+	{
+		data = x;
+		down = NULL;
+		right = NULL;
+		visited = 0;
+	}
+	friend class Graph;
+	friend class Stack;
+	friend class Queue;
+};
+class Stack
+{
+	Node *top;
+
+public:
+	Stack()
+	{
+		top = NULL;
+	}
+	void push(string data)
+	{
+		Node *new_node = new Node(data);
+		if (top == NULL)
+		{
+			top = new_node;
+			return;
+		}
+		else
+		{
+			new_node->down = top;
+			top = new_node;
+			return;
+		}
+	}
+	Node *pop()
+	{
+		if (top == NULL)
+		{
+			return NULL;
+		}
+		else
+		{
+			Node *temp = top;
+			top = top->down;
+			temp->down = NULL;
+			return temp;
+		}
+	}
+	bool is_empty()
+	{
+		if (top == NULL)
+		{
+			return true;
+		}
+		return false;
+	}
+	bool search(string data)
+	{
+		Node *temp = top;
+		while (temp->down != NULL)
+		{
+			if (temp->data == data)
+			{
+				return true;
+			}
+			temp = temp->down;
+		}
+		return false;
+	}
+	friend class Graph;
+};
+class Queue
+{
+	Node *front;
+	Node *rear;
+
+public:
+	Queue()
+	{
+		front = rear = NULL;
+	}
+	void enqueue(string data)
+	{
+		Node *new_node = new Node(data);
+		if (front == NULL)
+		{
+			front = new_node;
+			rear = new_node;
+			return;
+		}
+		else
+		{
+			rear->right = new_node;
+			rear = rear->right;
+			return;
+		}
+	}
+	Node *dequeue()
+	{
+		if (front == NULL)
+		{
+			return NULL;
+		}
+		else if (front == rear)
+		{
+			Node *temp = front;
+			front = NULL;
+			rear = NULL;
+			temp->right = NULL;
+			return temp;
+		}
+		else
+		{
+			Node *temp = front;
+			front = front->right;
+			temp->right = NULL;
+			return temp;
+		}
+	}
+	bool empty()
+	{
+		if (front == NULL && rear == NULL)
+		{
+			return true;
+		}
+		return false;
+	}
+	bool search(string data)
+	{
+		Node *temp = front;
+		while (temp != rear)
+		{
+			if (temp->data == data)
+			{
+				return true;
+			}
+			temp = temp->right;
+		}
+		return false;
+	}
+	friend class Graph;
+};
+class Graph
+{
+public:
+	Node *head;
+
+public:
+	Graph()
+	{
+		head = NULL;
+	}
+	void insert(string data, string adj)
+	{
+		if (head == NULL)
+		{
+			Node *new_data = new Node(data);
+			new_data->right = new Node(adj);
+			new_data->down = new Node(adj);
+			new_data->down->right = new Node(data);
+			head = new_data;
+			return;
+		}
+		else
+		{
+			Node *data_temp = search_down(data);
+			if (data_temp == NULL)
+			{
+				Node *new_data = new Node(data);
+				new_data->right = new Node(adj);
+				Node *temp = head;
+				while (temp->down != NULL)
+				{
+					temp = temp->down;
+				}
+				temp->down = new_data;
+
+				if (search_down(adj) == NULL)
+				{
+					new_data->down = new Node(adj);
+					new_data->down->right = new Node(data);
+				}
+				else
+				{
+					Node *temp = search_down(adj);
+					while (temp->right != NULL)
+					{
+						temp = temp->right;
+					}
+					temp->right = new Node(data);
+				}
+				return;
+			}
+			else
+			{
+				Node *adj_temp = search_right(data_temp, adj);
+				if (adj_temp == NULL)
+				{
+					Node *temp = data_temp;
+					while (temp->right != NULL)
+					{
+						temp = temp->right;
+					}
+					temp->right = new Node(adj);
+					if (search_down(adj) == NULL)
+					{
+						Node *temp1 = head;
+						while (temp1->down != NULL)
+						{
+							temp1 = temp1->down;
+						}
+						temp1->down = new Node(adj);
+						temp1->down->right = new Node(data);
+						return;
+					}
+					else
+					{
+						Node *temp1 = search_down(adj);
+						while (temp1->right != NULL)
+						{
+							temp1 = temp1->right;
+						}
+						temp1->right = new Node(data);
+						return;
+					}
+					return;
+				}
+				else
+				{
+					cout << "Already Present! Error" << endl;
+					return;
+				}
+			}
+		}
+	}
+	void DFS(Node *r)
+	{
+		clear_visit_status();
+		Stack s;
+		Node *temp = r;
+		mark_as_visited(temp->data);
+		s.push(temp->data);
+		while (!s.is_empty())
+		{
+			Node *temp1 = s.pop();
+			cout << temp1->data << "->";
+			Node *anchor = search_down(temp1->data);
+			while (anchor != NULL)
+			{
+				if (anchor->visited == 0)
+				{
+					s.push(anchor->data);
+					mark_as_visited(anchor->data);
+				}
+				anchor = anchor->right;
+			}
+		}
+	}
+	void BFS(Node *r)
+	{
+		clear_visit_status();
+		Queue q;
+		Node *temp = r;
+		mark_as_visited(temp->data);
+		q.enqueue(temp->data);
+		while (!q.empty())
+		{
+			Node *temp1 = q.dequeue();
+			cout << temp1->data << "->";
+			Node *anchor = search_down(temp1->data);
+			while (anchor != NULL)
+			{
+				if (anchor->visited == 0)
+				{
+					q.enqueue(anchor->data);
+					mark_as_visited(anchor->data);
+				}
+				anchor = anchor->right;
+			}
+		}
+	}
+	void mark_as_visited(string data)
+	{
+		Node *temp = head;
+		Node *temp1 = NULL;
+		while (temp != NULL)
+		{
+			temp1 = temp;
+			while (temp1 != NULL)
+			{
+				if (temp1->data == data)
+				{
+					temp1->visited = 1;
+				}
+				temp1 = temp1->right;
+			}
+			temp = temp->down;
+		}
+	}
+	void clear_visit_status()
+	{
+		Node *temp1 = NULL;
+		Node *temp = head;
+		while (temp != NULL)
+		{
+			temp1 = temp;
+			while (temp1 != NULL)
+			{
+				temp1->visited = 0;
+				temp1 = temp1->right;
+			}
+			temp = temp->down;
+		}
+	}
+	void display()
+	{
+		Node *temp1 = NULL;
+		Node *temp2 = head;
+		while (temp2 != NULL)
+		{
+			temp1 = temp2;
+			while (temp1 != NULL)
+			{
+				if (temp1->right != NULL)
+				{
+					cout << temp1->data << "->";
+				}
+				else
+				{
+					cout << temp1->data << "-" << endl;
+				}
+				temp1 = temp1->right;
+			}
+			cout << "|" << endl;
+			temp2 = temp2->down;
+		}
+	}
+	Node *search_down(string data)
+	{
+		Node *temp = head;
+		while (temp != NULL)
+		{
+			if (temp->data == data)
+			{
+				return temp;
+			}
+			temp = temp->down;
+		}
+		return NULL;
+	}
+	Node *search_right(Node *r, string data)
+	{
+		Node *temp = r;
+		while (temp != NULL)
+		{
+			if (temp->data == data)
+			{
+				return temp;
+			}
+			temp = temp->right;
+		}
+		return NULL;
+	}
+	void choice()
+	{
+		int x = 1;
+		while (x == 1)
+		{
+			cout << endl
+				 << "1 - Insert landmarks near College" << endl;
+			cout << "2 - Display landmarks" << endl;
+			cout << "3 - DFS" << endl;
+			cout << "4 - BFS" << endl;
+			cout << "5 - Exit" << endl;
+			cout << endl
+				 << "Enter choice - " << endl;
+			int choice;
+			cin >> choice;
+			switch (choice)
+			{
+			case 1:
+			{
+				cout << "Enter data" << endl;
+				string data;
+				cin >> data;
+				cout << "Enter adjacent node - " << endl;
+				string adj;
+				cin >> adj;
+				insert(data, adj);
+				break;
+			}
+			case 2:
+			{
+				display();
+				cout << endl;
+				break;
+			}
+			case 3:
+			{
+				cout << "Enter source node-" << endl;
+				string data1;
+				cin >> data1;
+				Node *r = search_down(data1);
+				DFS(r);
+				cout << endl;
+				break;
+			}
+			case 4:
+			{
+				cout << "Enter source node-" << endl;
+				string data2;
+				cin >> data2;
+				Node *r1 = search_down(data2);
+				BFS(r1);
+				cout << endl;
+				break;
+			}
+			case 5:
+			{
+				x = 2;
+				break;
+			}
+			}
+		}
+	}
+};
+int main()
+{
+	Graph g;
+	g.choice();
+}
+
+ASSIGNMENT 7
+#include <iostream>
+#include <vector>
+#define MAX 5
+#define infinity 9999
+using namespace std;
+class Graph
+{
+	int data[MAX][MAX];
+	int n;
+	string *cities;
+
+public:
+	Graph(int x)
+	{
+		n = x;
+		cities = new string[n];
+	}
+	void readgraph();
+	void displaygraph();
+	int prims(Graph &);
+	void choice();
+};
+void Graph::readgraph()
+{
+	int i, j;
+	for (i = 0; i < n; i++)
+	{
+		cout << "Enter the " << i + 1 << " source city : " << endl;
+		cin >> cities[i];
+		for (int j = 0; j < n; j++)
+		{
+			cout << "Enter the " << j + 1 << " destination city : " << endl;
+			cin >> cities[j];
+			cout << endl
+				 << "Enter the cost between cities: ";
+			cin >> data[i][j];
+		}
+	}
+}
+void Graph::displaygraph()
+{
+	int i, j;
+	for (int i = 0; i < n; i++)
+	{
+		if (i == 0)
+		{
+			cout << "\t";
+		}
+		cout << cities[i] << "\t";
+	}
+	cout << endl;
+	for (i = 0; i < n; i++)
+	{
+		cout << endl;
+		for (j = 0; j < n; j++)
+		{
+			if (j == 0)
+			{
+				cout << cities[i] << "\t";
+			}
+			cout << data[i][j] << "\t";
+		}
+	}
+}
+int Graph::prims(Graph &spanning)
+{
+	int cost[MAX][MAX];
+	int u, v, min_distance, distance[MAX], from[MAX];
+	int visited[MAX], i, j, min_cost, no_of_edges;
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < n; j++)
+		{
+			if (data[i][j] == 0)
+			{
+				cost[i][j] = infinity;
+			}
+			else
+			{
+				cost[i][j] = data[i][j];
+			}
+			spanning.data[i][j] = 0;
+		}
+	}
+	distance[0] = 0;
+	visited[0] = 1;
+	for (i = 1; i < n; i++)
+	{
+		distance[i] = cost[0][i];
+		visited[i] = 0;
+		from[i] = 0;
+	}
+	min_cost = 0;
+	no_of_edges = n - 1;
+	while (no_of_edges > 0)
+	{
+		min_distance = infinity;
+		for (int i = 1; i < n; i++)
+		{
+			if (visited[i] == 0 && distance[i] < min_distance)
+			{
+				v = i;
+				min_distance = distance[i];
+			}
+		}
+		u = from[v];
+		spanning.data[u][v] = distance[v];
+		spanning.data[v][u] = distance[v];
+		no_of_edges--;
+		visited[v] = 1;
+		for (i = 1; i < n; i++)
+		{
+			if (visited[i] == 0 && cost[i][v] < distance[i])
+			{
+				distance[i] = cost[i][v];
+				from[i] = v;
+			}
+		}
+		min_cost = min_cost + cost[u][v];
+	}
+	spanning.n = n;
+	return (min_cost);
+}
+void Graph::choice()
+{
+	Graph spanning(n);
+	int x = 1, choice;
+	while (x == 1)
+	{
+		cout << endl
+			 << "*******MENU*******" << endl;
+		cout << "1. Read Graph" << endl;
+		cout << "2. Display input adjacent matrix" << endl;
+		cout << "3. Display Spanning distance matrix" << endl;
+		cout << "4. Total cost of minimum spanning tree: " << endl;
+		cout << "5. Exit" << endl;
+		cout << "Enter your choice: " << endl;
+		cin >> choice;
+		switch (choice)
+		{
+		case 1:
+		{
+			this->readgraph();
+			break;
+		}
+		case 2:
+		{
+			cout << endl
+				 << "The original graph (input adjacency matrix) is: "
+				 << endl;
+			this->displaygraph();
+			break;
+		}
+		case 3:
+		{
+			int total_cost = this->prims(spanning);
+			cout << endl
+				 << "Spanning tree matrix: " << endl;
+			spanning.displaygraph();
+			break;
+		}
+		case 4:
+		{
+			int total_cost = this->prims(spanning);
+			cout << endl
+				 << " Total cost of minimum spanning tree= "
+				 << total_cost;
+			break;
+		}
+		case 5:
+		{
+			x = 2;
+			break;
+		}
+		}
+	}
+}
+int main()
+{
+	int n;
+	cout << "Enter the number of cities(Vertices)" << endl;
+	cin >> n;
+	Graph g(n);
+	g.choice();
+	return 0;
+}
+
+ASSIGNMENT 8
+#include <iostream>
+using namespace std;
+class node
+{
+	node *left, *right;
+	int data;
+	int level;
+
+public:
+	node()
+	{
+		level = 0;
+		left = right = NULL;
+		data = 0;
+	}
+	friend class OBST;
+};
+class OBST
+{
+	int *keys;
+	int *frequency;
+	int totalKeys;
+	node *root;
+	int totalCost;
+
+public:
+	OBST(int x)
+	{
+		totalCost = 0;
+		root = NULL;
+		totalKeys = x;
+		keys = new int[totalKeys];
+		frequency = new int[totalKeys];
+		for (int i = 0; i < totalKeys; i++)
+		{
+			keys[i] = 0;
+			frequency[i] = 0;
+		}
+	}
+	void enterKeys_Frequency()
+	{
+		for (int i = 0; i < totalKeys; i++)
+		{
+			cout << "Enter the Key " << i + 1 << endl;
+			cin >> keys[i];
+			cout << "Enter the frequency of Key " << i + 1 << endl;
+			cin >> frequency[i];
+		}
+	}
+	void sortDescending()
+	{ // use of Bubble sort to sort the frequency and keys array
+		for (int i = totalKeys; i >= 0; i--)
+		{
+			for (int j = totalKeys; j > totalKeys - i; j--)
+			{
+				if (frequency[j] > frequency[j - 1])
+				{
+					int t1 = frequency[j];
+					frequency[j] = frequency[j - 1];
+					frequency[j - 1] = t1;
+					int t2 = keys[j];
+					keys[j] = keys[j - 1];
+					keys[j - 1] = t2;
+				}
+			}
+		}
+	}
+	void add_node(int x)
+	{
+		node *temp = new node();
+		temp->data = x;
+		temp->left = NULL;
+		temp->right = NULL;
+		node *current = root;
+		if (root == NULL)
+		{
+			root = temp;
+		}
+		else
+		{
+			while (true)
+			{
+				if (current->data <= x)
+				{
+					if (current->right != NULL)
+					{
+						current = current->right;
+					}
+					else
+					{
+						current->right = temp;
+						break;
+					}
+				}
+				else
+				{
+					if (current->left != NULL)
+					{
+						current = current->left;
+					}
+					else
+					{
+						current->left = temp;
+						break;
+					}
+				}
+			}
+		}
+	}
+	void buildOBST()
+	{
+		sortDescending();
+		for (int i = 0; i < totalKeys; i++)
+		{
+			int x = keys[i];
+			add_node(x);
+		}
+		cout << "Tree is built" << endl;
+		cout << "Pre-order traversal of the tree - ";
+		preorder(root);
+		cout << endl;
+	}
+	int search(int x)
+	{
+		node *temp = root;
+		int level = 0;
+		while (temp != NULL)
+		{
+			if (temp->data == x)
+			{
+				return level;
+			}
+			else if (temp->data > x)
+			{
+				temp = temp->left;
+				level++;
+			}
+			else if (temp->data < x)
+			{
+				temp = temp->right;
+				level++;
+			}
+		}
+		return 0;
+	}
+	void calculateCost()
+	{
+		sortDescending();
+		cout << "Keys Frequency Level Search Cost" << endl;
+		for (int i = 0; i < totalKeys; i++)
+		{
+			int x = keys[i];
+			int c1 = 0;
+			int level = search(x);
+			c1 = frequency[i] * (level + 1);
+			level++;
+			cout << keys[i] << " " << frequency[i] << " " << level - 1 << " " << c1 << endl;
+			totalCost = totalCost + c1;
+		}
+		cout << "Total cost = " << totalCost << endl;
+	}
+	void preorder(node *root)
+	{
+		if (root != NULL)
+		{
+			cout << root->data << " ";
+			preorder(root->left);
+			preorder(root->right);
+		}
+	}
+};
+int main()
+{
+	int n;
+	cout << "Enter total no of keys" << endl;
+	cin >> n;
+	OBST o1(n);
+	char c = 'y';
+	bool buildTree = 0; // to prompt the to build tree first before calling calculateCost function
+	bool inputGiven = 0;
+	while (c != 'n')
+	{
+		cout << "------------------------------------------" << endl;
+		cout << "1. Povide keys and their frequencys" << endl;
+		cout << "2. Build Optimal Binary search tree" << endl;
+		cout << "3. Calculate search cost" << endl;
+		cout << "------------------------------------------" << endl;
+		int ch;
+		cout << "Enter choice - " << endl;
+		cin >> ch;
+		if (ch == 1)
+		{
+			if (inputGiven == 0)
+			{
+				inputGiven = 1;
+				o1.enterKeys_Frequency();
+			}
+			else
+			{
+				cout << "Keys are already provided" << endl;
+			}
+		}
+		else if (ch == 2)
+		{
+			o1.buildOBST();
+			buildTree = 1;
+		}
+		else if (ch == 3)
+		{
+			if (buildTree == 0)
+			{
+				cout << "Tree hasn't build yet, build tree first" << endl;
+			}
+			else
+			{
+				o1.calculateCost();
+			}
+		}
+		else
+		{
+			cout << "You have entered a wrong choice" << endl;
+		}
+		cout << "Do you want to continue (y/n) - " << endl;
+		cin >> c;
+	}
+	return 0;
+}
+
+ASSIGNMENT 9
+#include <iostream>
+#include <string.h>
+using namespace std;
+#define m 10
+class node
+{
+	node *left, *right;
+	int keyword;
+	string meaning;
+	int height; // balance factor
+public:
+	node()
+	{
+		left = right = NULL;
+		keyword = 0;
+		meaning = "----";
+		height = 1;
+	}
+	node(int x, string y)
+	{
+		left = right = NULL;
+		keyword = x;
+		meaning = y;
+		height = 1;
+	}
+	friend class AVL;
+};
+class Queue
+{
+	node *a[m];
+	int front, rear;
+
+public:
+	Queue()
+	{
+		front = rear = -1;
+	}
+	void enqueue(node *temp)
+	{
+		if (front == -1)
+		{
+			front = 0;
+		}
+		else if (rear == m - 1)
+		{ // cout<<"Overflow"<<endl;
+			return;
+		}
+		rear++;
+		a[rear] = temp;
+	}
+	node *dequeue()
+	{
+		if (front == -1)
+		{ // cout<<"Underflow"<<endl;
+			return NULL;
+		}
+		else if (front == rear)
+		{
+			node *temp = a[front];
+			front = -1;
+			rear = -1;
+			return temp;
+		}
+		else
+		{
+			node *temp = a[front];
+			front++;
+			return temp;
+		}
+	}
+	bool empty()
+	{
+		if (front == -1 || front == rear + 1)
+			return 1;
+		return 0;
+	}
+};
+class AVL
+{
+	node *root;
+
+public:
+	AVL()
+	{
+		root = NULL;
+	}
+	int height(node *p)
+	{
+		if (p == NULL)
+		{
+			return 0;
+		}
+		return p->height;
+	}
+	int balanceFactor(node *p)
+	{
+		if (p == NULL)
+		{
+			return 0;
+		}
+		return height(p->left) - height(p->right);
+	}
+	void updateHeight(node *p)
+	{
+		p->height = 1 + max(height(p->left), height(p->right));
+	}
+	int max(int a, int b)
+	{
+		if (a > b)
+			return a;
+		else
+			return b;
+	}
+	node *rotateLeft(node *p)
+	{ // ll_rotate
+		node *newNode = p->right;
+		p->right = newNode->left;
+		newNode->left = p;
+		updateHeight(p);
+		updateHeight(newNode);
+		return newNode;
+	}
+	node *rotateRight(node *p)
+	{ // rr_rotate
+		node *newNode = p->left;
+		p->left = newNode->right;
+		newNode->right = p;
+		updateHeight(p);
+		updateHeight(newNode);
+		return newNode;
+	}
+	node *rotateLeftRight(node *p)
+	{ // lr_rotate
+		p->left = rotateLeft(p->left);
+		return rotateRight(p);
+	}
+	node *rotateRightLeft(node *p)
+	{ // rl_rotate
+		p->right = rotateRight(p->right);
+		return rotateLeft(p);
+	}
+	node *balance(node *p)
+	{
+		if (balanceFactor(p) == 2)
+		{
+			if (balanceFactor(p->left) < 0)
+			{
+				p = rotateLeftRight(p);
+			}
+			else
+			{
+				p = rotateRight(p);
+			}
+		}
+		else if (balanceFactor(p) == -2)
+		{
+			if (balanceFactor(p->right) > 0)
+				p = rotateRightLeft(p);
+			else
+				p = rotateLeft(p);
+		}
+		updateHeight(p);
+		return p;
+	}
+	node *insert(int x, string y, node *root)
+	{
+		if (root == NULL)
+		{
+			node *temp = new node();
+			temp->keyword = x;
+			temp->meaning = y;
+			root = temp;
+			return root;
+		}
+		if (x < root->keyword)
+			root->left = insert(x, y, root->left);
+		else if (x > root->keyword)
+			root->right = insert(x, y, root->right);
+		else
+		{
+			root->meaning = y; // meaning of an existing keyword is updated
+			return root;
+		}
+		return balance(root);
+	}
+	void inorder(node *root)
+	{
+		if (root != NULL)
+		{
+			inorder(root->left);
+			cout << root->keyword << " ";
+			inorder(root->right);
+		}
+	}
+	void display()
+	{
+		cout << "Ascending order" << endl;
+		inorder(root);
+	}
+	void add_node()
+	{
+		int x;
+		string y;
+		cout << "Enter Keyword - " << endl;
+		cin >> x;
+		cout << "Enter its meaning - " << endl;
+		cin >> y;
+		root = insert(x, y, root);
+	}
+	void levelWiseTraversal()
+	{
+		Queue q1;
+		q1.enqueue(root);
+		while (!q1.empty())
+		{
+			node *temp = q1.dequeue();
+			cout << temp->keyword << " ";
+			if (temp->left != NULL)
+				q1.enqueue(temp->left);
+			if (temp->right != NULL)
+				q1.enqueue(temp->right);
+		}
+	}
+	bool search(node *root, int key)
+	{
+		if (root == NULL)
+			return false;
+		if (key < root->keyword)
+			return search(root->left, key);
+		else if (key > root->keyword)
+			return search(root->right, key);
+		else
+		{
+			cout << "Keyword is present" << endl;
+			cout << root->keyword << " : " << root->meaning << endl;
+			return true;
+		}
+	}
+	void searchKey()
+	{
+		int n;
+		cout << "Enter keyword" << endl;
+		cin >> n;
+		if (search(root, n))
+		{ // cout<<"Keyword is present"<<endl;
+		}
+		else
+			cout << "Keyword is not present" << endl;
+	}
+};
+int main()
+{
+	AVL a1;
+	char ch = 'y';
+	while (ch != 'n')
+	{
+		cout << "-----------------------------" << endl;
+		cout << "1. Insert key-value pair" << endl;
+		cout << "2. Search key" << endl;
+		cout << "3. Level order traversal" << endl;
+		cout << "4. Inorder traversal" << endl;
+		cout << "-----------------------------" << endl;
+		cout << "Enter your choice: ";
+		int c;
+		cin >> c;
+		if (c == 1)
+		{
+			a1.add_node();
+		}
+		else if (c == 2)
+		{
+			a1.searchKey();
+		}
+		else if (c == 3)
+		{
+			a1.levelWiseTraversal();
+		}
+		else if (c == 4)
+		{
+			a1.display();
+		}
+		else
+		{
+			cout << "You have entered a wrong choice" << endl;
+		}
+		cout << "Do you want to continue (y/n) -" << endl;
+		cin >> ch;
+	}
+	return 0;
+}
+
+ASSIGNMENT 10
+#include <iostream>
+#include <queue>
+using namespace std;
+class Node
+{
+    int val;
+    Node *left = nullptr;
+    Node *right = nullptr;
+
+public:
+    friend class Heap;
+};
+class Heap
+{
+    Node *ROOT = nullptr;
+    int numNodes = 0;
+
+public:
+    void insert(int keys[], int n)
+    { // Levelwise insertion of nodes
+        // keys is an array that represents the binary tree
+        // n is the number of nodes
+        numNodes = n;
+        // Create ROOT node and assign it val = keys[0]
+        Node *newNode = new (Node);
+        newNode->val = keys[0];
+        ROOT = newNode;
+        // Perform level-wise traversal and insert nodes with values
+        // from keys
+        int i = 0;
+        queue<Node *> q;
+        q.push(ROOT);
+        while (i < n - 1)
+        {
+            // Pop node from queue
+            Node *poppedNode = q.front();
+            q.pop();
+            // Add left child and increment i
+            Node *leftNode = new (Node);
+            leftNode->val = keys[++i];
+            poppedNode->left = leftNode;
+            q.push(poppedNode->left);
+            // Add right child and increment i
+            Node *rightNode = new (Node);
+            rightNode->val = keys[++i];
+            poppedNode->right = rightNode;
+            q.push(poppedNode->right);
+        }
+    }
+    void breadthFirst()
+    {
+        queue<Node *> q;
+        q.push(ROOT);
+        while (!q.empty())
+        {
+            Node *poppedNode = q.front();
+            cout << poppedNode->val << " ";
+            q.pop();
+            if (poppedNode->left != nullptr)
+            {
+                q.push(poppedNode->left);
+            }
+            if (poppedNode->right != nullptr)
+            {
+                q.push(poppedNode->right);
+            }
+        }
+        cout << "\n";
+    }
+    Node *heapify(Node *node)
+    {
+        if (node == nullptr)
+        {
+            return nullptr;
+        }
+        node->left = heapify(node->left);   // Heapify left subtree of node
+        node->right = heapify(node->right); // Heapify right subtree of node
+        if (node->left != nullptr && node->left->val > node->val)
+        { // Left child's value is greater than root's value
+            int temp = node->left->val;
+            node->left->val = node->val;
+            node->val = temp;
+        }
+        if (node->right != nullptr && node->right->val > node->val)
+        { // Right child's value is greater than root's value
+            int temp = node->right->val;
+            node->right->val = node->val;
+            node->val = temp;
+        }
+        return node;
+    }
+    void sort()
+    { // Heap Sort Algorithm
+        for (int i = 0; i < numNodes; i++)
+        {
+            // 1. Heapify the tree
+            heapify(ROOT);
+            // 2. Get the last node from the heapified tree
+            Node *lastNode = getLastNodeValue();
+            // 3. Swap the values of the last node and ROOT node
+            int temp = ROOT->val;
+            ROOT->val = lastNode->val;
+            lastNode->val = temp;
+            // 4. Print the value of the lastNode and delete it from the tree
+            cout << lastNode->val << " ";
+            deleteNode(ROOT, lastNode->val);
+        }
+        cout << "\n";
+    }
+    Node *deleteNode(Node *node, int val)
+    {
+        if (node == nullptr)
+        {
+            return nullptr;
+        }
+        if (node->val == val)
+        {
+            delete node;
+            return nullptr;
+        }
+        node->left = deleteNode(node->left, val);
+        node->right = deleteNode(node->right, val);
+        return node;
+    }
+    Node *getLastNodeValue()
+    { // Perform BFS traversal and return the node
+        // popped last from the queue
+        queue<Node *> q;
+        q.push(ROOT);
+        Node *poppedNode = nullptr;
+        while (!q.empty())
+        {
+            poppedNode = q.front();
+            q.pop();
+            if (poppedNode->left != nullptr)
+            {
+                q.push(poppedNode->left);
+            }
+            if (poppedNode->right != nullptr)
+            {
+                q.push(poppedNode->right);
+            }
+        }
+        // Once the queue is empty, poppedNode is not updated
+        // Hence, poppedNode represents the last node of the BFS sequence
+        return poppedNode;
+    }
+};
+int main()
+{
+    int keys[12] = {87, 5, 34, 99, 44, 12, 68, 27, 25, 4, 10, 8};
+    Heap heap;
+    heap.insert(keys, 12);
+    heap.sort();
+    return 0;
+}
+
+ASSIGNMENT 11
+#include <iostream>
+#include <fstream>
+using namespace std;
+class MyFile
+{
+	char buffer[40], fname[10];
+	int roll, count;
+	string name, address;
+	fstream file;
+
+public:
+	MyFile()
+	{
+		roll = 0;
+		count = 0;
+		name = '\0';
+		address = '\0';
+		cout << "Enter name of file : ";
+		cin >> fname;
+	}
+	~MyFile()
+	{
+		remove("file");
+	}
+	void writeFile();
+	void readFile();
+	void searchRecord();
+	void deleteRecord();
+};
+void MyFile ::writeFile()
+{
+	file.open(fname, ios::out);
+	if (!file)
+		cout << "\n\nThere is an Error Opening file..." << endl;
+	else
+	{
+		cout << "Enter number of records : ";
+		cin >> count;
+		for (int i = 0; i < count; i++)
+		{
+			cout << "Roll number : ";
+			cin >> roll;
+			cout << "Name : ";
+			cin >> name;
+			cout << "Address : ";
+			cin >> address;
+			file << roll << " " << name << " " << address << endl;
+		}
+	}
+	file.close();
+}
+void MyFile ::searchRecord()
+{
+	file.open(fname, ios::in);
+	if (!file)
+		cout << "\n\nError 404 File Not Found..." << endl;
+	else
+	{
+		string temp;
+		cout << "Enter Roll No to Search : ";
+		cin >> temp;
+		while (!file.eof())
+		{
+			file.getline(buffer, 40);
+			string a;
+			a += buffer[0];
+			a += buffer[1];
+			if (temp == a)
+			{
+				cout << "Record Found" << endl
+					 << buffer;
+				return;
+			}
+		}
+		cout << "Record Not Found!!!";
+	}
+	file.close();
+}
+void MyFile ::readFile()
+{
+	file.open(fname, ios::in);
+	if (!file)
+		cout << "\n\nError 404 File Not Found..." << endl;
+	else
+	{
+		int i = 0;
+		while (!file.eof())
+		{
+			file.getline(buffer, 40);
+			cout << "Record " << i << " : " << buffer << endl;
+			i++;
+		}
+	}
+	file.close();
+}
+void MyFile ::deleteRecord()
+{
+	fstream tempfile;
+	tempfile.open("TempFile.txt", ios::out);
+	file.open(fname, ios::in);
+	if (!file)
+		cout << "\n\nError 404 File Not Found..." << endl;
+	else
+	{
+		string temp;
+		cout << "Enter Roll No to Search : ";
+		cin >> temp;
+		while (!file.eof())
+		{
+			file.getline(buffer, 40);
+			string a;
+			a += buffer[0];
+			a += buffer[1];
+			if (temp == a)
+				cout << "Record Deleted" << endl
+					 << buffer << endl;
+			else
+				tempfile << buffer << endl;
+		}
+	}
+	file.close();
+	tempfile.close();
+	tempfile.open("TempFile.txt", ios::in);
+	file.open(fname, ios::out);
+	if (!file)
+		cout << "\n\nThere is an Error Opening file..." << endl;
+	else
+	{
+		while (!tempfile.eof())
+		{
+			tempfile.getline(buffer, 40);
+			file << buffer << endl;
+		}
+	}
+	file.close();
+	tempfile.close();
+	cout << "Updated File is : " << endl;
+	readFile();
+	remove("TempFile.txt");
+}
+int main()
+{
+	MyFile file;
+	//	file.writeFile();
+	//	file.readFile();
+	//	file.searchRecord();
+	file.deleteRecord();
+	return 0;
+}
+
+ASSIGNMENT 12
+#include <iostream>
+#include <fstream>
+#include <string.h>
+using namespace std;
+class HashTable
+{
+private:
+	int empId;
+	int location;
+
+public:
+	HashTable()
+	{
+		empId = 0;
+		location = 0;
+	}
+	void createHT();
+	void showHT();
+	int Hash(int);
+	void insertHT(int, int);
+	int searchHT();
+} HT[10];
+class MyFile
+{
+private:
+	char buffer[40], fname[10];
+	int empId, count;
+	string name, address;
+	fstream file;
+	HashTable HT;
+
+public:
+	MyFile()
+	{
+		empId = 0;
+		count = 0;
+		name = '\0';
+		address = '\0';
+		cout << "Enter name of file : ";
+		cin >> fname;
+	}
+	~MyFile()
+	{
+		remove("file");
+	}
+	void writeFile();
+	void readFile();
+	void searchRecord();
+	void deleteRecord();
+};
+void HashTable ::createHT()
+{
+	int i, Tablesize = 10;
+	for (i = 0; i < Tablesize; i++)
+	{
+		HT[i].empId = 0;
+		HT[i].location = 0;
+	}
+}
+void HashTable ::showHT()
+{
+	int i, Tablesize = 10;
+
+	for (i = 0; i < Tablesize; i++)
+	{
+		cout << "\n  " << i << " " << HT[i].empId << " " << HT[i].location;
+	}
+}
+int HashTable ::Hash(int empId)
+{
+	int Tablesize = 10;
+	return (empId % Tablesize);
+}
+void HashTable ::insertHT(int empId, int loc)
+{
+	int index, Tablesize = 10;
+	index = Hash(empId);
+	if (HT[index].location == 0)
+	{
+		HT[index].empId = empId;
+		HT[index].location = loc;
+	}
+	else
+	{
+		do
+		{
+			index = ((index + 1) % Tablesize);
+		} while (HT[index].location != 0);
+		HT[index].empId = empId;
+		HT[index].location = loc;
+	}
+}
+int HashTable ::searchHT()
+{
+	int empId, index, Tablesize = 10;
+	cout << "\n\t Enter Employee ID: ";
+	cin >> empId;
+	index = Hash(empId);
+	if (HT[index].empId == empId)
+	{
+		return HT[index].location;
+	}
+	else
+	{
+		do
+		{
+			index = ((index + 1) % Tablesize);
+		} while (HT[index].empId != empId);
+		return HT[index].location;
+	}
+}
+void MyFile ::writeFile()
+{
+	file.open(fname, ios::out);
+	if (!file)
+		cout << "\n\nThere is an Error Opening file..." << endl;
+	else
+	{
+		cout << "Enter number of records : ";
+		cin >> count;
+		for (int i = 0; i < count; i++)
+		{
+			cout << "Roll number : ";
+			cin >> empId;
+			cout << "Name : ";
+			cin >> name;
+			cout << "Address : ";
+			cin >> address;
+			cout << "Location : " << file.tellp() << endl;
+			HT.insertHT(empId, file.tellp());
+			file << empId << " " << name << " " << address << endl;
+		}
+	}
+	file.close();
+}
+void MyFile ::searchRecord()
+{
+	file.open(fname, ios::in);
+	if (!file)
+		cout << "\n\nError 404 File Not Found..." << endl;
+	else
+	{
+		int loc = HT.searchHT();
+		file.seekg(loc, ios::beg);
+		file.getline(buffer, 40);
+		cout << "Record Found" << endl
+			 << buffer;
+	}
+	file.close();
+}
+void MyFile ::readFile()
+{
+	file.open(fname, ios::in);
+	if (!file)
+		cout << "\n\nError 404 File Not Found..." << endl;
+	else
+	{
+		int i = 0;
+		while (!file.eof())
+		{
+			file.getline(buffer, 40);
+			cout << "Record " << i << " : " << buffer << endl;
+			i++;
+		}
+	}
+	file.close();
+	cout << "\n\nHash Table : " << endl;
+	HT.showHT();
+}
+int main()
+{
+	MyFile file;
+	file.writeFile();
+	file.readFile();
+	file.searchRecord();
+	return 0;
+}
