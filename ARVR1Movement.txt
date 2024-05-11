@@ -1,0 +1,26 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Movement : MonoBehaviour
+{
+    public float speed = 5.00f;
+    private float forwardinput;
+    private float horizontalinput;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        horizontalinput = Input.GetAxis("Horizontal");
+        forwardinput = Input.GetAxis("Vertical");
+
+        transform.Translate(Vector3.forward * Time.deltaTime * speed * forwardinput);
+        transform.Translate(Vector3.right * Time.deltaTime * speed * horizontalinput);
+    }
+}
